@@ -34,6 +34,8 @@ model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
 
 if args.lora_path is not None:
     from peft import LoraConfig, get_peft_model
+    from huggingface_hub import hf_hub_download
+    checkpoint_path = hf_hub_download(args.model_path, args.lora_path)
     target_modules=r'.*model.*\.(up_proj|k_proj|down_proj|v_proj|q_proj|o_proj|gate_proj)'
     config = LoraConfig(
         r=64, 
@@ -182,8 +184,8 @@ def eval_step(image, question, answer, question_type):
 """
 python test.py \
     --data_file ./workspace/data/vpd_mix470k_ins-it379k_drivelm91k_V1.json \
-    --model_path ./VPD-Driver \
-    --lora_path ./models/final_ft_3_epochs_lr5e-05_qwen2.5-vl_retain/step_3600/checkpoint.pt
+    --model_path gray311/VPD-Driver \
+    --lora_path ./checkpoint/checkpoint.pt
 
 
 """
